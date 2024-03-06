@@ -40,9 +40,8 @@ public class ExternalStorageMonitor {
                 // Get current timestamp
                 String timestamp = dateFormat.format(new Date());
 
-                // Here you can check if the type indicates it's an external storage
-                // For example, on Windows, you might check for type "NTFS" or "FAT32"
-                // On Linux, you might check for type "ext4" or "ntfs"
+                // on Windows, we might check for type "NTFS" or "FAT32"
+                // On Linux, we might check for type "ext4" or "ntfs"
 
                 // For simplicity, let's just print out the details for each file system
                 System.out.println("Time: " + timestamp);
