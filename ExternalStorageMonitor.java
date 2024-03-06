@@ -4,6 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 
 public class ExternalStorageMonitor {
 
@@ -12,7 +13,7 @@ public class ExternalStorageMonitor {
     public static void main(String[] args) {
         while (true) {
             sessionCounter++;
-            System.out.println("--------New session started--------("+sessionCounter+")");
+            System.out.println("--------New session started--------(" + sessionCounter + ")");
             sessionCounter++;
             checkForExternalStorage();
             System.out.println("--------New session ended--------");
@@ -29,11 +30,13 @@ public class ExternalStorageMonitor {
         Iterable<Path> roots = FileSystems.getDefault().getRootDirectories();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        for (Path root : roots) {
+        // Using an iterator to iterate over roots
+        Iterator<Path> iterator = roots.iterator();
+        for (int i = 0; i < roots.spliterator().getExactSizeIfKnown(); i++) {
+            Path root = iterator.next();
             try {
                 FileStore store = Files.getFileStore(root);
                 String type = store.type();
-                
                 // Get current timestamp
                 String timestamp = dateFormat.format(new Date());
 
