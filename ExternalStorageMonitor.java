@@ -45,6 +45,7 @@ public class ExternalStorageMonitor {
                 String type = store.type();
                 // Get current timestamp
                 String timestamp = dateFormat.format(new Date());
+                
 
                 // on Windows, we might check for type "NTFS" or "FAT32"
                 // On Linux, we might check for type "ext4" or "ntfs"
