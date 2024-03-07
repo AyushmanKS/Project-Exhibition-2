@@ -4,11 +4,12 @@ import java.nio.file.FileStore;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ExternalStorageCheckerGUI {
     private JFrame frame;
     private JTextArea textArea;
-    ExternalStorageChecker ext = new ExternalStorageChecker();
 
     public ExternalStorageCheckerGUI() {
         frame = new JFrame("External Storage Checker");
@@ -41,6 +42,7 @@ public class ExternalStorageCheckerGUI {
 
     public void checkForExternalStorage() {
         StringBuilder result = new StringBuilder();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         Iterable<Path> roots = FileSystems.getDefault().getRootDirectories();
 
@@ -48,27 +50,37 @@ public class ExternalStorageCheckerGUI {
             try {
                 FileStore store = Files.getFileStore(root);
                 String type = store.type();
+                String timestamp = dateFormat.format(new Date());
 
                 // Append the details to the result string
-                result.append("File system: ").append(root).append("\n");
+                result.append("Time: " + timestamp);
+                result.append("\nFile system: ").append(root).append("\n");
                 result.append("  Type: ").append(type).append("\n");
-                result.append("  Total space: ").append(store.getTotalSpace()).append("\n");
-                result.append("  Usable space: ").append(store.getUsableSpace()).append("\n");
-                result.append("  Unallocated space: ").append(store.getUnallocatedSpace()).append("\n");
+                result.append("  Total space: ").append(store.getTotalSpace() / (1024.0 * 1024.0 * 1024.0))
+                        .append(" GB\n");
+                result.append("  Used space: ").append((store.getTotalSpace() - store.getUsableSpace()) / (1024.0 * 1024.0 * 1024.0))
+                        .append(" GB\n");
+                result.append("  Free: ")
+                        .append((store.getUsableSpace()) / (1024.0 * 1024.0 * 1024.0))
+                        .append(" GB\n");
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+
         textArea.setText(result.toString());
     }
 
     public static void main(String[] args) {
         ExternalStorageCheckerGUI gui = new ExternalStorageCheckerGUI();
-
-        ExternalStorageMonitor obj = new ExternalStorageMonitor();
-        obj.checkForExternalStorage();
-        obj.sessionDetails();
         gui.display();
-        gui.checkForExternalStorage();
+        while (true) {
+            gui.checkForExternalStorage();
+            try {
+                Thread.sleep(500); // Check every 5 seconds
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
