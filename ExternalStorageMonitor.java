@@ -9,9 +9,11 @@ import java.util.Iterator;
 public class ExternalStorageMonitor {
 
     private static int sessionCounter = 0;
-
-    public static void main(String[] args) {
+    public static void sessionDetails(){
         while (true) {
+            //ExternalStorageCheckerGUI obj = new ExternalStorageCheckerGUI();
+            //obj.display();
+
             sessionCounter++;
             System.out.println("--------New session started--------(" + sessionCounter + ")");
             sessionCounter++;
@@ -24,6 +26,10 @@ public class ExternalStorageMonitor {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void main(String[] args) {
+       sessionDetails();
     }
 
     public static void checkForExternalStorage() {

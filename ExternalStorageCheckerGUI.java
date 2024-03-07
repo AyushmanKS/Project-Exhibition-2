@@ -8,6 +8,7 @@ import java.nio.file.Path;
 public class ExternalStorageCheckerGUI {
     private JFrame frame;
     private JTextArea textArea;
+    ExternalStorageChecker ext = new ExternalStorageChecker();
 
     public ExternalStorageCheckerGUI() {
         frame = new JFrame("External Storage Checker");
@@ -58,12 +59,15 @@ public class ExternalStorageCheckerGUI {
                 e.printStackTrace();
             }
         }
-
         textArea.setText(result.toString());
     }
 
     public static void main(String[] args) {
         ExternalStorageCheckerGUI gui = new ExternalStorageCheckerGUI();
+
+        ExternalStorageMonitor obj = new ExternalStorageMonitor();
+        obj.checkForExternalStorage();
+        obj.sessionDetails();
         gui.display();
         gui.checkForExternalStorage();
     }
